@@ -1,0 +1,16 @@
+﻿company_id,company,role,platform,account_id,source_url,clean_url,verification
+selectel,Selectel,baseline,pulse,Selectel_Official,https://www.tbank.ru/invest/social/profile/Selectel_Official/?author=profile,https://www.tbank.ru/invest/social/profile/Selectel_Official/,requires_live_check
+selectel,Selectel,baseline,telegram,selectel_IR,https://t.me/selectel_IR,https://t.me/selectel_IR,public_preview_accessible
+positive_technologies,Positive Technologies,competitor,pulse,Positive_technologies,https://www.tinkoff.ru/invest/social/profile/Positive_technologies/,https://www.tbank.ru/invest/social/profile/Positive_technologies/,requires_live_check
+positive_technologies,Positive Technologies,competitor,telegram,positive_investing,https://t.me/positive_investing,https://t.me/positive_investing,public_preview_accessible
+yandex,Яндекс,competitor,pulse,Yandex,https://www.tinkoff.ru/invest/social/profile/Yandex?utm_source=share,https://www.tbank.ru/invest/social/profile/Yandex/,requires_live_check
+yandex,Яндекс,competitor,telegram,ydex_forinvestors,https://t.me/ydex_forinvestors,https://t.me/ydex_forinvestors,public_preview_accessible
+astra,Группа Астра,competitor,pulse,Astra_Group,https://www.tinkoff.ru/invest/social/profile/Astra_Group/,https://www.tbank.ru/invest/social/profile/Astra_Group/,requires_live_check
+iva_technologies,IVA Technologies,competitor,pulse,IVA_Technologies,https://www.tbank.ru/invest/social/profile/IVA_Technologies/?author=profile,https://www.tbank.ru/invest/social/profile/IVA_Technologies/,requires_live_check
+softline,Softline,competitor,pulse,Softline_Official,https://www.tinkoff.ru/invest/social/profile/Softline_Official?utm_source=share,https://www.tbank.ru/invest/social/profile/Softline_Official/,requires_live_check
+arenadata,Arenadata,competitor,pulse,Arenadata,https://www.tbank.ru/invest/social/profile/Arenadata/?author=profile,https://www.tbank.ru/invest/social/profile/Arenadata/,requires_live_check
+arenadata,Arenadata,competitor,telegram,arenadata_investing,https://t.me/arenadata_investing,https://t.me/arenadata_investing,public_preview_accessible
+diasoft,Диасофт,competitor,pulse,Diasoft,https://www.tbank.ru/invest/social/profile/Diasoft/?author=profile,https://www.tbank.ru/invest/social/profile/Diasoft/,requires_live_check
+basis,Базис,competitor,pulse,Basis_Official,https://www.tbank.ru/invest/social/profile/Basis_Official/?author=profile,https://www.tbank.ru/invest/social/profile/Basis_Official/,requires_live_check
+basis,Базис,competitor,telegram,basis_invest_official,https://t.me/basis_invest_official,https://t.me/basis_invest_official,public_preview_accessible
+cloud_ru,Cloud.ru,competitor,pulse,Cloud.ru,https://www.tbank.ru/invest/social/profile/Cloud.ru/?author=profile&navigate_from_app=invest&appId=supreme,https://www.tbank.ru/invest/social/profile/Cloud.ru/,requires_live_check

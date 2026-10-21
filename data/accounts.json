@@ -1,0 +1,178 @@
+{
+  "project_name": "Invest Social Intelligence",
+  "version": "1.0",
+  "comparison_baseline_company_id": "selectel",
+  "companies_count": 10,
+  "accounts_count": 15,
+  "platforms_in_seed": [
+    "pulse",
+    "telegram"
+  ],
+  "market_monitoring_platforms_planned": [
+    "pulse",
+    "telegram",
+    "vk",
+    "smartlab",
+    "alfa_investor",
+    "bcs_profit"
+  ],
+  "time_window_days_default": 90,
+  "sources": [
+    {
+      "company_id": "selectel",
+      "company": "Selectel",
+      "role": "baseline",
+      "platform": "pulse",
+      "account_id": "Selectel_Official",
+      "source_url": "https://www.tbank.ru/invest/social/profile/Selectel_Official/?author=profile",
+      "clean_url": "https://www.tbank.ru/invest/social/profile/Selectel_Official/",
+      "verification": "requires_live_check"
+    },
+    {
+      "company_id": "selectel",
+      "company": "Selectel",
+      "role": "baseline",
+      "platform": "telegram",
+      "account_id": "selectel_IR",
+      "source_url": "https://t.me/selectel_IR",
+      "clean_url": "https://t.me/selectel_IR",
+      "verification": "public_preview_accessible"
+    },
+    {
+      "company_id": "positive_technologies",
+      "company": "Positive Technologies",
+      "role": "competitor",
+      "platform": "pulse",
+      "account_id": "Positive_technologies",
+      "source_url": "https://www.tinkoff.ru/invest/social/profile/Positive_technologies/",
+      "clean_url": "https://www.tbank.ru/invest/social/profile/Positive_technologies/",
+      "verification": "requires_live_check"
+    },
+    {
+      "company_id": "positive_technologies",
+      "company": "Positive Technologies",
+      "role": "competitor",
+      "platform": "telegram",
+      "account_id": "positive_investing",
+      "source_url": "https://t.me/positive_investing",
+      "clean_url": "https://t.me/positive_investing",
+      "verification": "public_preview_accessible"
+    },
+    {
+      "company_id": "yandex",
+      "company": "Яндекс",
+      "role": "competitor",
+      "platform": "pulse",
+      "account_id": "Yandex",
+      "source_url": "https://www.tinkoff.ru/invest/social/profile/Yandex?utm_source=share",
+      "clean_url": "https://www.tbank.ru/invest/social/profile/Yandex/",
+      "verification": "requires_live_check"
+    },
+    {
+      "company_id": "yandex",
+      "company": "Яндекс",
+      "role": "competitor",
+      "platform": "telegram",
+      "account_id": "ydex_forinvestors",
+      "source_url": "https://t.me/ydex_forinvestors",
+      "clean_url": "https://t.me/ydex_forinvestors",
+      "verification": "public_preview_accessible"
+    },
+    {
+      "company_id": "astra",
+      "company": "Группа Астра",
+      "role": "competitor",
+      "platform": "pulse",
+      "account_id": "Astra_Group",
+      "source_url": "https://www.tinkoff.ru/invest/social/profile/Astra_Group/",
+      "clean_url": "https://www.tbank.ru/invest/social/profile/Astra_Group/",
+      "verification": "requires_live_check"
+    },
+    {
+      "company_id": "iva_technologies",
+      "company": "IVA Technologies",
+      "role": "competitor",
+      "platform": "pulse",
+      "account_id": "IVA_Technologies",
+      "source_url": "https://www.tbank.ru/invest/social/profile/IVA_Technologies/?author=profile",
+      "clean_url": "https://www.tbank.ru/invest/social/profile/IVA_Technologies/",
+      "verification": "requires_live_check"
+    },
+    {
+      "company_id": "softline",
+      "company": "Softline",
+      "role": "competitor",
+      "platform": "pulse",
+      "account_id": "Softline_Official",
+      "source_url": "https://www.tinkoff.ru/invest/social/profile/Softline_Official?utm_source=share",
+      "clean_url": "https://www.tbank.ru/invest/social/profile/Softline_Official/",
+      "verification": "requires_live_check"
+    },
+    {
+      "company_id": "arenadata",
+      "company": "Arenadata",
+      "role": "competitor",
+      "platform": "pulse",
+      "account_id": "Arenadata",
+      "source_url": "https://www.tbank.ru/invest/social/profile/Arenadata/?author=profile",
+      "clean_url": "https://www.tbank.ru/invest/social/profile/Arenadata/",
+      "verification": "requires_live_check"
+    },
+    {
+      "company_id": "arenadata",
+      "company": "Arenadata",
+      "role": "competitor",
+      "platform": "telegram",
+      "account_id": "arenadata_investing",
+      "source_url": "https://t.me/arenadata_investing",
+      "clean_url": "https://t.me/arenadata_investing",
+      "verification": "public_preview_accessible"
+    },
+    {
+      "company_id": "diasoft",
+      "company": "Диасофт",
+      "role": "competitor",
+      "platform": "pulse",
+      "account_id": "Diasoft",
+      "source_url": "https://www.tbank.ru/invest/social/profile/Diasoft/?author=profile",
+      "clean_url": "https://www.tbank.ru/invest/social/profile/Diasoft/",
+      "verification": "requires_live_check"
+    },
+    {
+      "company_id": "basis",
+      "company": "Базис",
+      "role": "competitor",
+      "platform": "pulse",
+      "account_id": "Basis_Official",
+      "source_url": "https://www.tbank.ru/invest/social/profile/Basis_Official/?author=profile",
+      "clean_url": "https://www.tbank.ru/invest/social/profile/Basis_Official/",
+      "verification": "requires_live_check"
+    },
+    {
+      "company_id": "basis",
+      "company": "Базис",
+      "role": "competitor",
+      "platform": "telegram",
+      "account_id": "basis_invest_official",
+      "source_url": "https://t.me/basis_invest_official",
+      "clean_url": "https://t.me/basis_invest_official",
+      "verification": "public_preview_accessible"
+    },
+    {
+      "company_id": "cloud_ru",
+      "company": "Cloud.ru",
+      "role": "competitor",
+      "platform": "pulse",
+      "account_id": "Cloud.ru",
+      "source_url": "https://www.tbank.ru/invest/social/profile/Cloud.ru/?author=profile&navigate_from_app=invest&appId=supreme",
+      "clean_url": "https://www.tbank.ru/invest/social/profile/Cloud.ru/",
+      "verification": "requires_live_check"
+    }
+  ],
+  "notes": [
+    "All URLs supplied by the user; clean_url removes tracking parameters and uses tbank.ru as a candidate canonical host for Pulse.",
+    "Pulse accounts require live verification; the seed registry does not imply data-collection availability.",
+    "A missing Telegram account for a company means not provided, not that no channel exists.",
+    "No statistics are embedded. Record metric snapshots with timestamps and source metadata."
+  ]
+}
