@@ -19,7 +19,7 @@ def clipboard_html(matrix):
             style = base_style + ('background:#FFF4F4;border-left:1px solid #EB4247;border-right:1px solid #EB4247;' if name == 'Selectel' else '')
             table += '<td style="'+style+'">'+escape(str(value))+'</td>'
         table += '</tr>'
-    table += '</tbody></table>' 
+    table += '</tbody></table>'
     b64 = lambda s: base64.b64encode(s.encode('utf-8')).decode('ascii')
     return '''<!doctype html><html lang="ru"><meta charset="utf-8"><style>'''+font_css()+'''
 body{margin:0;font:13px Manrope,sans-serif;color:#092433;background:white}
