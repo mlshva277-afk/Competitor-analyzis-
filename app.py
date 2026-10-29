@@ -3,16 +3,21 @@ from datetime import timedelta
 import os
 import pandas as pd
 import plotly.express as px
+px.defaults.color_discrete_sequence = ['#EB4247', '#092433', '#596974', '#A12E37', '#50788B', '#8798A1']
 import streamlit as st
 from sqlalchemy import select, func
 from storage import database, seed_registry, Company, Account, Post, SourceSyncRun
 from analysis import post_frame, audience_comparison, rank_posts, comments_frame, activity, TOPICS, FORMATS, TONES
 from ingest import SCHEMAS
 from adapters import FileAdapter, StubAdapter
-from demo import populate_demo
+from demo import populate_demo, ensure_monthly_demo
+from report_ui import render_monthly
+from monthly import report_window
+from branding import app_css
 
 st.set_page_config(page_title='Invest Social Intelligence', page_icon='📊', layout='wide')
 ROOT = Path(__file__).resolve().parent
+st.html('<style>'+app_css()+'</style>')
 
 
 @st.cache_resource
@@ -51,18 +56,19 @@ if is_demo:
         empty = session.scalar(select(func.count()).select_from(Post)) == 0
     if empty:
         populate_demo(factory)
+    ensure_monthly_demo(factory)
     st.warning('DEMO — синтетические данные в отдельной базе. Не являются статистикой компаний. Ссылки example.org — демонстрационные.')
 
 with factory() as session:
     companies = {x.id: x.name for x in session.scalars(select(Company))}
     registry = pd.DataFrame([{**{c.name: getattr(x, c.name) for c in Account.__table__.columns}, 'role': 'baseline' if x.company_id == 'selectel' else 'competitor'} for x in session.scalars(select(Account))])
 
-page = st.sidebar.radio('Раздел', ['Обзор', 'Selectel vs конкуренты', 'Публикации', 'Темы и тренды', 'Реакции/комментарии', 'Источники и качество данных'])
-platform = st.sidebar.selectbox('Площадка', ['pulse', 'telegram', 'vk', 'smartlab', 'alfa_investor', 'bcs_profit'])
-kind_label = st.sidebar.radio('Материалы', ['Официальные посты', 'Внешние упоминания'])
+page = st.sidebar.radio('Раздел', ['Ежемесячный отчёт', 'Обзор', 'Selectel vs конкуренты', 'Публикации', 'Темы и тренды', 'Реакции/комментарии', 'Источники и качество данных'])
+platform = st.sidebar.selectbox('Площадка для разделов анализа', ['pulse', 'telegram', 'vk', 'smartlab', 'alfa_investor', 'bcs_profit'], disabled=page == 'Ежемесячный отчёт')
+kind_label = st.sidebar.radio('Материалы', ['Официальные посты', 'Внешние упоминания'], disabled=page == 'Ежемесячный отчёт')
 kind = 'official' if kind_label == 'Официальные посты' else 'external'
 today = pd.Timestamp.now(tz='UTC').date()
-period = st.sidebar.date_input('Период публикации (UTC)', (today-timedelta(days=89), today))
+period = st.sidebar.date_input('Период публикации (UTC)', (today-timedelta(days=89), today), disabled=page == 'Ежемесячный отчёт')
 selected = st.sidebar.multiselect('Компании', list(companies), default=list(companies), format_func=companies.get)
 st.sidebar.caption('Нет данных ≠ 0. Покрытие: только импортированные строки. Полный сбор платформ не заявляется.')
 frame_all = post_frame(factory)
@@ -74,8 +80,9 @@ frame = frame_all.loc[(frame_all.platform == platform) & (frame_all.kind == kind
 if not frame.empty:
     dates = pd.to_datetime(frame.published_at, utc=True).dt.date
     frame = frame.loc[(dates >= start) & (dates <= end)]
-st.title('Invest Social Intelligence')
-st.caption(f'{page} · {platform} · {kind_label} · {start:%d.%m.%Y} — {end:%d.%m.%Y} · {"demo" if is_demo else "real"}')
+if page != 'Ежемесячный отчёт':
+    st.title('Инвестиционные каналы')
+    st.caption(f'{page} · {platform} · {kind_label} · {start:%d.%m.%Y} — {end:%d.%m.%Y} · {"demo" if is_demo else "real"}')
 
 
 def table(df, columns=None):
@@ -95,7 +102,10 @@ def table(df, columns=None):
 
 POST_COLUMNS = ['company_id', 'post_id', 'source_url', 'published_at', 'observed_at', 'text', 'reactions', 'comments_count', 'shares', 'views', 'reach', 'followers', 'interactions', 'per_1000_followers', 'per_1000_views', 'age_days', 'metric_age_days', 'topics', 'formats', 'communication_tone', 'label_method']
 
-if page == 'Обзор':
+if page == 'Ежемесячный отчёт':
+    render_monthly(factory, companies, selected, is_demo)
+
+elif page == 'Обзор':
     a, b, c, d = st.columns(4)
     a.metric('Компаний в реестре', len(companies))
     b.metric('Аккаунтов в реестре', len(registry))
@@ -114,9 +124,10 @@ if page == 'Обзор':
     table(registry, ['company_id', 'role', 'platform', 'account_id', 'source_url', 'clean_url', 'verification'])
 
 elif page == 'Selectel vs конкуренты':
-    st.subheader('Аудитория: выбранный месяц против предыдущего')
-    month = st.date_input('Месяц сравнения', today.replace(day=1))
-    st.caption('Последний реальный снимок в каждом календарном месяце (UTC). Без снимка в одном из месяцев динамика отсутствует. Даты замеров показаны в таблице.')
+    st.subheader('Аудитория на конец отчётного периода')
+    month = st.date_input('Месяц отчёта (данные за предыдущий месяц)', today.replace(day=1))
+    comparison_window = report_window(month)
+    st.caption(f'Снимки на {comparison_window.snapshot_date:%d.%m.%Y} и {comparison_window.previous_snapshot_date:%d.%m.%Y}, Москва. Если снимка в нужный день нет, динамика не рассчитывается. Например, ноябрь = 31 октября − 30 сентября.')
     aud = audience_comparison(factory, platform, month)
     all_companies = pd.DataFrame({'company_id': pd.Series(selected, dtype=object)})
     aud = all_companies.merge(aud, how='left', on='company_id')
@@ -127,9 +138,9 @@ elif page == 'Selectel vs конкуренты':
     st.subheader('Активность по выбранному периоду')
     table(activity(frame, selected, start, end))
     st.subheader('Активность: выбранный месяц против предыдущего')
-    month_start = pd.Timestamp(month, tz='UTC').replace(day=1)
-    prev_start = month_start-pd.offsets.MonthBegin(1)
-    next_start = month_start+pd.offsets.MonthBegin(1)
+    month_start = comparison_window.current_start
+    prev_start = comparison_window.previous_start
+    next_start = comparison_window.report_start
     subset = frame_all.loc[(frame_all.platform == platform) & (frame_all.kind == kind)]
     if subset.empty:
         st.info('Нет данных для сравнения активности.')

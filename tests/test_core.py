@@ -77,14 +77,14 @@ def test_snapshot_history_latest(factory):
 
 
 def test_monthly_uses_only_actual_months(factory):
-    row = dict(platform='telegram', account_id='selectel_IR', source_url='https://t.me/selectel_IR', followers='100', observed_at='2026-01-10T00:00:00Z')
+    row = dict(platform='telegram', account_id='selectel_IR', source_url='https://t.me/selectel_IR', followers='100', observed_at='2026-01-31T12:00:00Z')
     import_frame(factory, pd.DataFrame([row]), 'audience')
     result = audience_comparison(factory, 'telegram', '2026-02-01').set_index('company_id')
-    assert pd.isna(result.loc['selectel', 'followers'])
+    assert result.loc['selectel', 'followers'] == 100
     assert pd.isna(result.loc['selectel', 'delta'])
-    row.update(followers='125', observed_at='2026-02-12T00:00:00Z')
+    row.update(followers='125', observed_at='2026-02-28T12:00:00Z')
     import_frame(factory, pd.DataFrame([row]), 'audience')
-    result = audience_comparison(factory, 'telegram', '2026-02-01').set_index('company_id')
+    result = audience_comparison(factory, 'telegram', '2026-03-01').set_index('company_id')
     assert result.loc['selectel', 'delta'] == 25
     assert result.loc['selectel', 'delta_pct'] == 25
     import_frame(factory, pd.DataFrame([row]), 'audience')

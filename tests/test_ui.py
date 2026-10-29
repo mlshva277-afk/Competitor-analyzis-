@@ -3,11 +3,11 @@ import pytest
 from streamlit.testing.v1 import AppTest
 
 ROOT = Path(__file__).resolve().parents[1]
-PAGES = ['Обзор', 'Selectel vs конкуренты', 'Публикации', 'Темы и тренды', 'Реакции/комментарии', 'Источники и качество данных']
+PAGES = ['Ежемесячный отчёт', 'Обзор', 'Selectel vs конкуренты', 'Публикации', 'Темы и тренды', 'Реакции/комментарии', 'Источники и качество данных']
 
 
 @pytest.mark.parametrize('demo', [False, True])
-def test_all_six_pages(tmp_path, monkeypatch, demo):
+def test_all_pages(tmp_path, monkeypatch, demo):
     monkeypatch.setenv('ISI_DB_PATH', str(tmp_path/'real.sqlite'))
     app = AppTest.from_file(str(ROOT/'app.py'), default_timeout=30).run()
     assert not app.exception

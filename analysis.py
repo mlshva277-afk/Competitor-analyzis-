@@ -23,12 +23,16 @@ def classify(text):
     return [topic for topic, words in TOPICS.items() if any(w in lower for w in words)]
 
 
-def post_frame(factory, now=None):
+def post_frame(factory, now=None, observed_before=None):
     now = pd.Timestamp(now or pd.Timestamp.now(tz='UTC'))
     rows = []
     with factory() as session:
         for post in session.scalars(select(Post)):
-            metric = session.scalar(select(PostMetricSnapshot).where(PostMetricSnapshot.post_pk == post.id).order_by(PostMetricSnapshot.observed_at.desc()).limit(1))
+            query = select(PostMetricSnapshot).where(PostMetricSnapshot.post_pk == post.id)
+            if observed_before is not None:
+                cutoff = pd.Timestamp(observed_before).tz_convert('UTC').isoformat()
+                query = query.where(PostMetricSnapshot.observed_at < cutoff)
+            metric = session.scalar(query.order_by(PostMetricSnapshot.observed_at.desc()).limit(1))
             labels = list(session.scalars(select(TopicLabel).where(TopicLabel.post_pk == post.id)))
             row = {c.name: getattr(post, c.name) for c in Post.__table__.columns}
             for field in ['reactions', 'comments_count', 'shares', 'views', 'reach', 'followers', 'observed_at']:
@@ -49,19 +53,15 @@ def post_frame(factory, now=None):
 
 
 def audience_comparison(factory, platform, month):
-    """Latest actual observations in selected month and preceding calendar month."""
-    month = pd.Timestamp(month)
-    if month.tzinfo is None:
-        month = month.tz_localize('UTC')
-    start = month.normalize().replace(day=1)
-    end = start + pd.offsets.MonthBegin(1)
-    previous = start - pd.offsets.MonthBegin(1)
+    """Report month refers to the two preceding exact month-end dates (Moscow)."""
+    from monthly import report_window, REPORT_TZ
+    window = report_window(month)
     rows = []
     with factory() as session:
         for account in session.scalars(select(Account).where(Account.platform == platform)):
             snapshots = list(session.scalars(select(AudienceSnapshot).where(AudienceSnapshot.account_pk == account.id)))
-            current = sorted([s for s in snapshots if start <= pd.Timestamp(s.observed_at) < end], key=lambda s: s.observed_at)
-            past = sorted([s for s in snapshots if previous <= pd.Timestamp(s.observed_at) < start], key=lambda s: s.observed_at)
+            current = sorted([s for s in snapshots if pd.Timestamp(s.observed_at).tz_convert(REPORT_TZ).date() == window.snapshot_date], key=lambda s: s.observed_at)
+            past = sorted([s for s in snapshots if pd.Timestamp(s.observed_at).tz_convert(REPORT_TZ).date() == window.previous_snapshot_date], key=lambda s: s.observed_at)
             a, b = (current[-1] if current else None), (past[-1] if past else None)
             rows.append(dict(company_id=account.company_id, followers=a.followers if a else None,
                              observed_at=a.observed_at if a else None, previous_observed_at=b.observed_at if b else None,
