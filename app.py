@@ -40,7 +40,8 @@ LABELS = {
     'previous_posts': 'Постов в прошлом месяце (выборка)', 'sample_delta': 'Изменение числа постов (выборка)',
 }
 
-mode = st.sidebar.radio('Набор данных', ['Реальные данные', 'Демо (demo)'])
+mode = st.sidebar.radio('Набор данных', ['Реальные данные', 'Демо (demo)'],
+                        index=1 if os.getenv('ISI_DEFAULT_DEMO') == '1' else 0)
 is_demo = mode == 'Демо (demo)'
 real_path = Path(os.getenv('ISI_DB_PATH', str(ROOT/'data/invest.sqlite'))).resolve()
 demo_path = real_path.with_name(real_path.stem + '.demo.sqlite')
